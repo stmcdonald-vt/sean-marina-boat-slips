@@ -1,14 +1,11 @@
-import { assert } from "chai";
+import { assert, use } from "chai";
 import chaiHttp from "chai-http";
 import { describe, it, beforeEach } from "mocha";
-import server from "../server";
+import { server } from "../server";
 
-chai.use(chaiHttp);
+use(chaiHttp);
 
 describe("Boat Slip Vacate PUT Route", () => {
-    beforeEach(
-      // Wipe database
-    )
     it("Returns a 204 status code if boat slip was previously occupied.", async () => {
         // fill the boat slips
         for (let i = 0; i < 3; i++) {

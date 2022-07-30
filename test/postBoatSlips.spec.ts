@@ -1,9 +1,9 @@
-import { assert } from "chai";
+import { assert, use } from "chai";
 import chaiHttp from "chai-http";
 import { describe, it } from "node:test";
-import server from "../server";
+import { server } from "../server";
 
-chai.use(chaiHttp);
+use(chaiHttp);
 
 describe("Boat Slip POST Route", () => {
     it("Returns a slip number when available.", async () => {
