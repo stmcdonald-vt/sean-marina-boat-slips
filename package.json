@@ -24,7 +24,8 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "test": "mocha --require ts-node/register test/**/*.spec.ts"
+    "test": "mocha --require ts-node/register test/**/*.spec.ts",
+    "dev": "nodemon server.ts"
   },
   "repository": {
     "type": "git",
