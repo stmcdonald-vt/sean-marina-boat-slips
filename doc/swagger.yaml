@@ -1,0 +1,84 @@
+openapi: 3.0.0
+info:
+  title: Sean's Marina Boat Monitoring API
+  description: API for monitoring boat slips at Sean's Marina
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+    description: Localhost API server
+paths:
+  /boat-slips:
+    get:
+      summary: Returns a list of boat slips at the marina.
+      responses:
+        '200':    
+          description: A JSON array of boat slip objects.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    slipNumber:
+                      type: number
+                    vacant:
+                      type: boolean
+                    vesselName:
+                      type: string
+    post:
+      summary: Request to use any vacant boat slip.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vesselName:
+                  type: string
+      responses:
+        '200':
+          description: There is a vacant boat slip available.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  slipNumber: 
+                    type: number
+                  
+        '409':
+          description: There are no vacant boat slips available.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode: 
+                    type: number
+                  Message: 
+                    type: string
+  /boat-slips/{slip-number}/vacate:
+    put:
+      summary: Requests to vacate a boat slip.
+      parameters:
+        - in: path
+          name: slip-number
+          required: true
+          schema:
+            type: number
+      responses:
+        '204':
+          description: The boat slip was occupied and has been successfully vacated.
+        '409':
+          description: The boat slip is already vacant.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode: 
+                    type: number
+                  Message: 
+                    type: string
