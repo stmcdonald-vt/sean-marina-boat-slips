@@ -1,11 +1,15 @@
 import { Router } from 'express';
+import { getBoatSlips, putBoatSlip } from '../controllers/boatSlipsController';
 export const boatSlipRouter = Router();
 
+
 boatSlipRouter.get("/", (req, res) => {
-  res.send("Get Route");
+    const boatSlips = getBoatSlips();
+    res.status(200).json(boatSlips);
 })
 
 boatSlipRouter.post("/", (req, res) => {
+  const boatSlips = getBoatSlips();
   res.send("Post Route");
 })
 
