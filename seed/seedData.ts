@@ -7,6 +7,6 @@ config();
 
 export const seedFromJSON = async (data: IBoatSlip[], env: Environment = Environment.PROD) => {
   for (let item of data) {
-    writeBoatSlip(item, env);
+    await writeBoatSlip(item, env);
   }
 }

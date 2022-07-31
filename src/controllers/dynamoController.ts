@@ -6,7 +6,6 @@ import IBoatSlip from "../interfaces/iBoatSlip";
 config();
 
 const client = new DynamoDB({ region: process.env.AWS_DEFAULT_REGION });
-console.log(process.env.DB_TABLE);
 let TABLE_NAME: string = process.env.DB_TABLE || "seans-marina-boat-slip-db";
 
 export const readBoatSlips = async (env: Environment = Environment.PROD) => {
@@ -25,10 +24,11 @@ export const readVacantBoatSlips = async (env: Environment = Environment.PROD) =
   if (env === Environment.TEST) {
     TABLE_NAME = process.env.TEST_DB_TABLE || "seans-marina-boat-slip-db";
   }
-
   const params = {
     TableName: TABLE_NAME,
-    IndexName: "isVacant-slipNumber-index"
+    FilterExpression: 'isVacant = :x',
+    ExpressionAttributeValues: {':x': {S: 'x'}},
+    ConsistentRead: true
   }
   const vacantBoatSlips = await client.scan(params);
   return vacantBoatSlips.Items?.map((item) => item.slipNumber.N);
@@ -38,7 +38,6 @@ export const writeBoatSlip = async (record: IBoatSlip, env: Environment = Enviro
   if (env === Environment.TEST) {
     TABLE_NAME = process.env.TEST_DB_TABLE || "seans-marina-boat-slip-db";
   }
-  
   const params = {
     TableName: TABLE_NAME,
     Item: {

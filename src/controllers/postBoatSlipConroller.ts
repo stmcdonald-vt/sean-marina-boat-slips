@@ -30,4 +30,5 @@ export const postBoatSlip = async (vesselName: string) => {
   payload = {
       slipNumber: parseInt(firstVacantSlipNumber),
   };
+  return payload;
 }

@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "ts-node src/server.ts",
-    "test": "mocha --require ts-node/register test/**/*.spec.ts",
+    "test": "env DB_TABLE=seans-marina-boat-slip-db-test mocha --require ts-node/register test/*.spec.ts",
     "dev": "nodemon src/server.ts",
     "seed": "ts-node seed/seedStarter.ts"
   },
