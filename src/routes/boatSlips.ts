@@ -11,7 +11,7 @@ boatSlipRouter.get("/", async (req, res) => {
 });
 
 boatSlipRouter.post("/", async (req, res) => {
-    const payload = await postBoatSlip(req);
+    const payload = await postBoatSlip(req.body.vesselName);
     if (payload?.statusCode) {
         res.status(payload.statusCode).json(payload);
         return;

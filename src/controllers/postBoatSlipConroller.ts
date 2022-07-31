@@ -3,7 +3,7 @@ import IBoatSlip from "../interfaces/iBoatSlip";
 import IStatus from "../interfaces/iStatus";
 import { readVacantBoatSlips, writeBoatSlip } from "./dynamoController";
 
-export const postBoatSlip = async (req: Request) => {
+export const postBoatSlip = async (vesselName: string) => {
   let payload: IStatus | Partial<IBoatSlip>;
   const vacantBoatSlips = (await readVacantBoatSlips()) || [];
   if (!vacantBoatSlips.length) {
@@ -24,7 +24,7 @@ export const postBoatSlip = async (req: Request) => {
   }
   writeBoatSlip({
       slipNumber: parseInt(firstVacantSlipNumber),
-      vesselName: req.body.vesselName,
+      vesselName: vesselName,
       vacant: false,
   });
   payload = {
