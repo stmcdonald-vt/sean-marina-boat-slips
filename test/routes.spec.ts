@@ -105,8 +105,6 @@ describe("Boat Slip Vacate PUT Route", () => {
     return seedFromJSON(starter.boatSlips, Environment.TEST);
   });
   it("Returns a 409 boat slip was already vacant", async () => {
-    // vacate boat slip first
-    await request(server).put("/boat-slips/1/vacate");
     const response = await request(server).put("/boat-slips/1/vacate");
     assert.equal(response.status, 409);
     assert.isObject(response.body);
