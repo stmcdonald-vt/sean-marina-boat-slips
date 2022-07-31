@@ -1,4 +1,4 @@
-import { assert, use } from "chai";
+import { assert } from "chai";
 import { describe, it, before } from "mocha";
 import { server } from "../src/server";
 import { seedFromJSON } from '../seed/seedData';

@@ -1,4 +1,3 @@
-import { Request } from "express";
 import IBoatSlip from "../interfaces/iBoatSlip";
 import IStatus from "../interfaces/iStatus";
 import { readVacantBoatSlips, writeBoatSlip } from "./dynamoController";

@@ -1,7 +1,5 @@
 import { Router } from "express";
-import BoatSlipFacotry from "../factories/boatSlipFactory";
 import { getBoatSlips } from "../controllers/getBoatSlipsController";
-import { post } from "superagent";
 import { postBoatSlip } from "../controllers/postBoatSlipConroller";
 import { putBoatSlip } from "../controllers/putBoatSlipController";
 export const boatSlipRouter = Router();
