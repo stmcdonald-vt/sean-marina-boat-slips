@@ -1,7 +1,8 @@
+import chai from "chai";
 import { assert, use } from "chai";
 import chaiHttp from "chai-http";
 import { describe, it } from "node:test";
-import { server } from "../server";
+import { server } from "../src/server";
 
 use(chaiHttp);
 

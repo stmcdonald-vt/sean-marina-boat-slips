@@ -26,9 +26,10 @@
     "mocha": "^10.0.0"
   },
   "scripts": {
-    "start": "ts-node src/controllers/boatSlipsController.ts",
+    "start": "ts-node src/server.ts",
     "test": "mocha --require ts-node/register test/**/*.spec.ts",
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts",
+    "seed": "ts-node seed/seedData.ts"
   },
   "repository": {
     "type": "git",
