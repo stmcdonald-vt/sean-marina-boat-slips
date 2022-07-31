@@ -6,7 +6,7 @@ const client = new DynamoDB({ region: process.env.AWS_DEFAULT_REGION });
 
 const TABLE_NAME: string = "seans-marina-boat-slip-db";
 
-export const getBoatSlips = async () => {
+export const readBoatSlips = async () => {
   const params = {
     TableName: TABLE_NAME,
     ConsistentRead: true
@@ -15,7 +15,7 @@ export const getBoatSlips = async () => {
   return boatSlips.Items;
 };
 
-export const getVacantBoatSlips = async () => {
+export const readVacantBoatSlips = async () => {
   const params = {
     TableName: TABLE_NAME,
     IndexName: "isVacant-slipNumber-index"
@@ -24,7 +24,7 @@ export const getVacantBoatSlips = async () => {
   return vacantBoatSlips.Items?.map((item) => item.slipNumber.N);
 }
 
-export const putBoatSlip = async (record: IBoatSlip) => {
+export const writeBoatSlip = async (record: IBoatSlip) => {
   const params = {
     TableName: TABLE_NAME,
     Item: {
