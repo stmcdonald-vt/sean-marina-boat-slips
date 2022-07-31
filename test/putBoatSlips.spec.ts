@@ -1,7 +1,8 @@
-import { assert, use } from "chai";
+import chai from "chai";
+import {use, assert} from "chai";
 import chaiHttp from "chai-http";
 import { describe, it, beforeEach } from "mocha";
-import { server } from "../server";
+import { server } from "../src/server";
 
 use(chaiHttp);
 
@@ -9,6 +10,7 @@ describe("Boat Slip Vacate PUT Route", () => {
     it("Returns a 204 status code if boat slip was previously occupied.", async () => {
         // fill the boat slips
         for (let i = 0; i < 3; i++) {
+            console.log("filling boat");
             await chai
                 .request(server)
                 .post("/boat-slips")

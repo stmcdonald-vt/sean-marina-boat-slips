@@ -13,23 +13,23 @@ export const getBoatSlips = async () => {
   return boatSlips.Items;
 };
 
-export const putBoatSlip = async (slipNumber : number, vesselName : string) => {
-  const params = {
-    TableName: TABLE_NAME,
-    Item: {
-      'slipNumber': {N: slipNumber.toString()},
-      'vesselName': {S: vesselName}
-    }
-  }
-  return await client.putItem(params);
-};
-
-export const getVacantBoatSlips = async (vesselName: string) => {
+export const getVacantBoatSlips = async () => {
   const params = {
     TableName: TABLE_NAME,
     IndexName: "isVacant-slipNumber-index",  
   }
   const vacantBoatSlips = await client.scan(params);
-  return vacantBoatSlips.Items;
+  return vacantBoatSlips.Items?.map((item) => item.slipNumber.N);
 }
 
+export const putBoatSlip = async (slipNumber : string, vesselName : string = "", isVacant: boolean = false) => {
+  const params = {
+    TableName: TABLE_NAME,
+    Item: {
+      'slipNumber': {N: slipNumber},
+      ...(vesselName && {'vesselName': {S: vesselName}}),
+      ...(isVacant && {'isVacant': {S: "x"}})
+    }
+  }
+  return await client.putItem(params);
+};
