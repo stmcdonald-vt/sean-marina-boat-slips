@@ -1,12 +1,18 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { config } from "dotenv";
+import Environment from "../enums/envEnum";
 import IBoatSlip from "../interfaces/iBoatSlip";
 
+config();
+
 const client = new DynamoDB({ region: process.env.AWS_DEFAULT_REGION });
+console.log(process.env.DB_TABLE);
+let TABLE_NAME: string = process.env.DB_TABLE || "seans-marina-boat-slip-db";
 
-const TABLE_NAME: string = "seans-marina-boat-slip-db";
-
-export const readBoatSlips = async () => {
+export const readBoatSlips = async (env: Environment = Environment.PROD) => {
+  if (env === Environment.TEST) {
+    TABLE_NAME = process.env.TEST_DB_TABLE || "seans-marina-boat-slip-db";
+  }
   const params = {
     TableName: TABLE_NAME,
     ConsistentRead: true
@@ -15,7 +21,11 @@ export const readBoatSlips = async () => {
   return boatSlips.Items;
 };
 
-export const readVacantBoatSlips = async () => {
+export const readVacantBoatSlips = async (env: Environment = Environment.PROD) => {
+  if (env === Environment.TEST) {
+    TABLE_NAME = process.env.TEST_DB_TABLE || "seans-marina-boat-slip-db";
+  }
+
   const params = {
     TableName: TABLE_NAME,
     IndexName: "isVacant-slipNumber-index"
@@ -24,7 +34,11 @@ export const readVacantBoatSlips = async () => {
   return vacantBoatSlips.Items?.map((item) => item.slipNumber.N);
 }
 
-export const writeBoatSlip = async (record: IBoatSlip) => {
+export const writeBoatSlip = async (record: IBoatSlip, env: Environment = Environment.PROD) => {
+  if (env === Environment.TEST) {
+    TABLE_NAME = process.env.TEST_DB_TABLE || "seans-marina-boat-slip-db";
+  }
+  
   const params = {
     TableName: TABLE_NAME,
     Item: {
