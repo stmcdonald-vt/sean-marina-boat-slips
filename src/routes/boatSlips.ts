@@ -1,55 +1,27 @@
 import { Router } from "express";
-import BoatSlipRecord from "../classes/boatSlipRecord";
-import {
-    getBoatSlips,
-    putBoatSlip,
-    getVacantBoatSlips,
-} from "../controllers/boatSlipsController";
+import { getBoatSlips } from "../controllers/getBoatSlipsController";
+import { postBoatSlip } from "../controllers/postBoatSlipConroller";
+import { putBoatSlip } from "../controllers/putBoatSlipController";
 export const boatSlipRouter = Router();
 
 boatSlipRouter.get("/", async (req, res) => {
-    const awsBoatSlips = await getBoatSlips();
-    const boatSlips = awsBoatSlips?.map((slip) =>
-        BoatSlipRecord.fromAWSItem(slip).boatSlip
-    );
-    res.status(200).json(boatSlips);
+    res.status(200).json(await getBoatSlips());
 });
 
 boatSlipRouter.post("/", async (req, res) => {
-    const vacantBoatSlips = (await getVacantBoatSlips()) || [];
-    if (!vacantBoatSlips.length) {
-        const payload = {
-            statusCode: 409,
-            Message: "There are no available boat slips.",
-        };
-        res.status(409).json(payload);
+    const payload = await postBoatSlip(req.body.vesselName);
+    if ('statusCode' in payload) {
+        res.status(payload.statusCode).json(payload);
         return;
     }
-
-    const firstVacantSlipNumber: string = vacantBoatSlips[0] || "";
-    if (!firstVacantSlipNumber) {
-        res.status(500).send();
-        return;
-    }
-    console.log(req.body);
-    putBoatSlip(firstVacantSlipNumber, req.body.vesselName);
-    const payload = {
-        slipNumber: firstVacantSlipNumber,
-    };
     res.status(200).json(payload);
 });
 
 boatSlipRouter.put("/:slipNumber/vacate", async (req, res) => {
-    const vacantBoatSlips = (await getVacantBoatSlips()) || [];
-    const boatSlipToVacate: string = req.params.slipNumber;
-    if (vacantBoatSlips.includes(boatSlipToVacate)) {
-        const payload = {
-            statusCode: 409,
-            Message: `Boat slip ${boatSlipToVacate} is currently vacant`,
-        };
-        res.status(409).json(payload);
+    const payload = await putBoatSlip(parseInt(req.params.slipNumber));
+    if (payload.Message) {
+        res.status(payload.statusCode).json(payload);
         return;
-    }
-    putBoatSlip(boatSlipToVacate, "", true);
+    } 
     res.status(204).send();
 });

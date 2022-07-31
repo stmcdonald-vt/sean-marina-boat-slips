@@ -1,0 +1,19 @@
+{
+  "boatSlips": [
+    {
+      "slipNumber": 1,
+      "vacant": false,
+      "vesselName": "A Rock"
+      },
+      {
+      "slipNumber": 2,
+      "vacant": false,
+      "vesselName": "Mister Krab's Wallet"
+      },
+      {
+      "slipNumber": 3,
+      "vacant": false,
+      "vesselName": "The Lid"
+      }
+  ]
+}
