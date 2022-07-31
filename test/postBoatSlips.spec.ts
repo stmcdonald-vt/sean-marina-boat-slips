@@ -1,15 +1,15 @@
 import chai from "chai";
 import { assert, use } from "chai";
-import chaiHttp from "chai-http";
 import { describe, it } from "node:test";
 import { server } from "../src/server";
-
-use(chaiHttp);
+import { seedFromJSON } from '../seed/seedData';
+import fullBoatSlips from '../seed/fullBoatSlips.json';
+const request = require('supertest');
 
 describe("Boat Slip POST Route", () => {
+    beforeEach(done => setTimeout(done, 1500));
     it("Returns a slip number when available.", async () => {
-        const response = await chai
-            .request(server)
+        const response = await request(server)
             .post("/boat-slips")
             .send({ vesselName: "The Salty Spitoon" });
         assert.equal(response.status, 200);
@@ -18,15 +18,8 @@ describe("Boat Slip POST Route", () => {
     });
 
     it("Returns a 409 when no vacant slips are ", async () => {
-        // fill the boat slips
-        for (let i = 0; i < 3; i++) {
-            await chai
-                .request(server)
-                .post("/boat-slips")
-                .send({ vesselName: `Test Vessel ${i}` });
-        }
-        const response = await chai
-            .request(server)
+        await seedFromJSON(fullBoatSlips.boatSlips);
+        const response = await request(server)
             .post("/boat-slips")
             .send({ vesselName: "The Salty Spitoon" });
         assert.equal(response.status, 409);

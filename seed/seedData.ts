@@ -1,10 +1,9 @@
 import { putBoatSlip } from '../src/controllers/boatSlipsController';
-import data from './data.json';
+import IBoatSlip from '../src/interfaces/iBoatSlip';
 
-export const seedData = async () => {
-  for(let item of data.boatSlips) {
-    putBoatSlip(item.slipNumber.toString(), "", true);
+
+export const seedFromJSON = async (data: IBoatSlip[]) => {
+  for (let item of data) {
+    putBoatSlip(item);
   }
 }
-
-seedData();

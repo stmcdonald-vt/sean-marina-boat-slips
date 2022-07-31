@@ -1,5 +1,5 @@
 import { Router } from "express";
-import BoatSlipRecord from "../classes/boatSlipRecord";
+import BoatSlipFacotry from "../factories/boatSlipFactory";
 import {
     getBoatSlips,
     putBoatSlip,
@@ -9,8 +9,8 @@ export const boatSlipRouter = Router();
 
 boatSlipRouter.get("/", async (req, res) => {
     const awsBoatSlips = await getBoatSlips();
-    const boatSlips = awsBoatSlips?.map((slip) =>
-        BoatSlipRecord.fromAWSItem(slip).boatSlip
+    const boatSlips = awsBoatSlips?.map(
+        (slip) => BoatSlipFacotry.fromAWSItem(slip)
     );
     res.status(200).json(boatSlips);
 });
@@ -31,8 +31,11 @@ boatSlipRouter.post("/", async (req, res) => {
         res.status(500).send();
         return;
     }
-    console.log(req.body);
-    putBoatSlip(firstVacantSlipNumber, req.body.vesselName);
+    putBoatSlip({
+        slipNumber: parseInt(firstVacantSlipNumber),
+        vesselName: req.body.vesselName,
+        vacant: false,
+    });
     const payload = {
         slipNumber: firstVacantSlipNumber,
     };
@@ -50,6 +53,8 @@ boatSlipRouter.put("/:slipNumber/vacate", async (req, res) => {
         res.status(409).json(payload);
         return;
     }
-    putBoatSlip(boatSlipToVacate, "", true);
+    putBoatSlip({
+      slipNumber: parseInt(boatSlipToVacate),
+      vacant: true});
     res.status(204).send();
 });

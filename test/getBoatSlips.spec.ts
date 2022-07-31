@@ -1,24 +1,22 @@
-import chai from "chai";
 import { assert, use } from "chai";
-import chaiHttp from "chai-http";
 import { describe, it } from "node:test";
 import { server } from "../src/server";
-
-use(chaiHttp);
+import IBoatSlip from "../src/interfaces/iBoatSlip";
+const request = require('supertest');
 
 describe("Boat Slip GET Route", () => {
+    beforeEach(done => setTimeout(done, 1500));
     it("Returns a 200 status code", async () => {
-        const response = await chai.request(server).get("/boat-slips");
+        const response = await request(server).get("/boat-slips");
         assert.equal(response.status, 200);
     });
 
     it("Returns a list of boat slip objects", async () => {
-        const response = await chai.request(server).get("/boat-slips");
+        const response = await request(server).get("/boat-slips");
         assert.isArray(response.body);
-        response.body.forEach((boatSlip: object) => {
-            assert.property(boatSlip, "slipNumber");
-            assert.property(boatSlip, "vacant");
-            assert.property(boatSlip, "string");
+
+        response.body.forEach((boatSlip: IBoatSlip) => {
+          assert.isObject(boatSlip);
         });
     });
 });

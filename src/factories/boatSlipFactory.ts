@@ -1,14 +1,20 @@
 import IBoatSlip from '../interfaces/iBoatSlip'
 import { AttributeValue } from '@aws-sdk/client-dynamodb';
 
-export default class BoatSlipRecord {
-  boatSlip: IBoatSlip;
-
-  constructor(boatSlip: IBoatSlip) {
-    this.boatSlip = boatSlip;
+export default class BoatSlipFactory {
+  static fromJson(obj: any): IBoatSlip {
+    if (!obj.slipNumber) {
+      throw new TypeError("Slip Number cannont be undefined");
+    }
+    return {
+      slipNumber: obj.slipNumber,
+      vesselName: obj.vesselName,
+      vacant: obj.vacant
+    }
+    
   }
 
-  static fromAWSItem(record: Record<string, AttributeValue>) {
+  static fromAWSItem(record: Record<string, AttributeValue>): IBoatSlip {
     let awsSlipNumber: number;
     let awsVesselName: string | undefined;
     let awsVacant: boolean = false;
@@ -33,6 +39,6 @@ export default class BoatSlipRecord {
       vacant: awsVacant
     }
 
-    return new BoatSlipRecord(newBoatSlip);
+    return newBoatSlip;
   }
 }
